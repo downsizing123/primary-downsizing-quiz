@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Primary Downsizing Quiz</title>
+
+  <style>
+    :root{
+      --blue:#00008b;
+      --yellow:#f2d61f;
+      --white:#ffffff;
+      --grey:#2b2b2b;
+      --muted:#586070;
+      --shadow: 0 18px 50px rgba(0,0,0,.12);
+      --radius: 22px;
+      --border: rgba(43,43,43,.14);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color: var(--grey);
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      background:
+        radial-gradient(1200px 600px at 12% 18%, rgba(242,214,31,.32), transparent 60%),
+        radial-gradient(900px 500px at 88% 22%, rgba(0,0,139,.30), transparent 62%),
+        linear-gradient(160deg, #050716, #0b0f2a 55%, #070a1c);
+    }
+    .wrap{ width:min(920px, 100%); display:grid; gap:14px; }
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+      color: rgba(255,255,255,.92);
+      padding: 6px 8px;
+    }
+    .brand{ display:flex; align-items:center; gap:10px; }
+    .badge{
+      width:38px;height:38px;border-radius:12px;
+      background: linear-gradient(135deg, var(--yellow), #ffe770);
+      display:grid;place-items:center;color:#141414;font-weight:900;
+      box-shadow: 0 10px 22px rgba(242,214,31,.18);
+    }
+    .bt1{font-size:14px;font-weight:900;letter-spacing:.2px;line-height:1.05}
+    .bt2{font-size:12px;color:rgba(255,255,255,.75);line-height:1.1;margin-top:2px}
+    .pill{
+      font-size:12px;font-weight:900;
+      padding:8px 12px;border-radius:999px;
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.14);
+      backdrop-filter: blur(8px);
+    }
+
+    .card{
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.16);
+    }
+    .head{
+      padding: 20px 22px 14px;
+      background: linear-gradient(135deg, rgba(0,0,139,.07), rgba(242,214,31,.14));
+      border-bottom: 1px solid rgba(43,43,43,.10);
+    }
+    .h1{margin:0 0 6px;font-size:22px;font-weight:950;letter-spacing:-.3px;color:#111827}
+    .sub{margin:0;color:var(--muted);font-size:14px;line-height:1.45}
+    .progress{margin-top:14px;height:10px;border-radius:999px;background: rgba(43,43,43,.12);overflow:hidden}
+    .progress > div{
+      height:100%;width:0%;
+      background: linear-gradient(90deg, var(--blue), #2f2fd6, var(--yellow));
+      border-radius:999px;transition: width .35s ease;
+    }
+
+    .body{ padding: 18px 22px 22px; }
+    .meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:13px;margin-bottom:10px}
+    .meta b{color:#111827}
+    .q{margin:0 0 14px;font-size:18px;font-weight:950;letter-spacing:-.2px;color:#0f172a}
+
+    .answers{display:grid;gap:10px}
+    .ans{
+      width:100%;text-align:left;
+      padding:14px 14px;border-radius:16px;
+      border: 1px solid rgba(43,43,43,.14);
+      background:#fff;cursor:pointer;
+      display:flex;gap:12px;align-items:flex-start;
+      transition: transform .05s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
+    }
+    .ans:hover{border-color: rgba(0,0,139,.40); box-shadow: 0 12px 26px rgba(0,0,0,.10); transform: translateY(-1px);}
+    .ans:active{transform: translateY(0px);}
+    .dot{
+      width:18px;height:18px;border-radius:50%;
+      border:2px solid rgba(43,43,43,.25);
+      margin-top:2px;position:relative;flex:0 0 auto;background:#fff;
+    }
+    .ans.selected{
+      border-color: rgba(0,0,139,.62);
+      background: linear-gradient(135deg, rgba(0,0,139,.05), rgba(242,214,31,.12));
+    }
+    .ans.selected .dot{border-color: var(--blue);}
+    .ans.selected .dot::after{
+      content:""; position:absolute; inset:3px; border-radius:50%;
+      background: linear-gradient(135deg, var(--blue), var(--yellow));
+    }
+    .label{font-weight:900;color:#111827;line-height:1.25}
+    .subline{display:block;margin-top:4px;font-weight:650;color:var(--muted);font-size:13px;line-height:1.35}
+
+    .nav{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+    .btn{
+      border:0;padding:12px 14px;border-radius:14px;
+      cursor:pointer;font-weight:950;letter-spacing:.1px;
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      min-width: 140px;
+      transition: transform .05s ease, opacity .2s ease, box-shadow .2s ease;
+    }
+    .btn:active{transform: translateY(1px);}
+    .btn.secondary{background: rgba(43,43,43,.08);color:#111827;}
+    .btn.primary{
+      background: linear-gradient(135deg, var(--blue), #2f2fd6);
+      color:#fff; box-shadow: 0 14px 30px rgba(0,0,139,.18);
+    }
+    .btn.primary:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+
+    .hidden{display:none !important;}
+
+    .box{
+      border-radius: 18px;
+      padding: 16px;
+      border: 1px solid rgba(43,43,43,.12);
+      background: linear-gradient(135deg, rgba(0,0,139,.06), rgba(242,214,31,.14));
+      margin: 14px 0 14px;
+    }
+    .scoreline{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+    .scorebig{font-size:34px;font-weight:990;letter-spacing:-.6px;color:#0f172a}
+    .scoremax{color:var(--muted);font-weight:850}
+    .rec{margin:10px 0 0;font-size:16px;font-weight:990;color:#111827}
+    .explain{margin:8px 0 0;color:var(--muted);font-weight:650;line-height:1.55;font-size:14px}
+
+    .formgrid{display:grid;gap:10px;margin-top:12px}
+    .row{display:grid;grid-template-columns: 1fr 1fr;gap:10px}
+    @media (max-width: 640px){ .row{grid-template-columns:1fr;} }
+    .field{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(43,43,43,.16);
+      font-size:14px;
+      outline:none;
+    }
+    .field:focus{border-color: rgba(0,0,139,.45); box-shadow: 0 0 0 4px rgba(0,0,139,.08);}
+    .smallnote{font-size:12px;color:var(--muted);line-height:1.4;margin:8px 0 0}
+    .error{color:#b00020;font-weight:800;font-size:13px;margin-top:10px}
+
+    a.btn{ text-decoration:none; }
+
+    .foot{
+      font-size:12px;color: rgba(255,255,255,.72);
+      text-align:center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="badge">✓</div>
+        <div>
+          <div class="bt1">Downsizing Timing Quiz</div>
+          <div class="bt2">Maple Ridge + Fraser Valley • 10 quick questions</div>
+        </div>
+      </div>
+      <div class="pill" id="scorePill">Score: 0</div>
+    </div>
+
+    <div class="card">
+      <div class="head">
+        <h1 class="h1">Is it the right time to downsize?</h1>
+        <p class="sub">Answer honestly. This gives you clarity on your best next step: <b>stay</b>, <b>plan</b>, or <b>move forward calmly</b>.</p>
+        <div class="progress" aria-label="Progress"><div id="progressFill"></div></div>
+      </div>
+
+      <div class="body">
+        <!-- QUIZ -->
+        <div id="quizView">
+          <div class="meta">
+            <div><b id="qNum">Question 1</b> of <span id="qTotal">10</span></div>
+            <div id="hint">Choose one option to continue</div>
+          </div>
+
+          <h2 class="q" id="qText"></h2>
+          <div class="answers" id="answers"></div>
+
+          <div class="nav">
+            <button class="btn secondary" id="prevBtn" type="button">← Previous</button>
+            <button class="btn primary" id="nextBtn" type="button" disabled>Next →</button>
+          </div>
+        </div>
+
+        <!-- LEAD CAPTURE -->
+        <div id="leadView" class="hidden">
+          <div class="meta">
+            <div><b>Almost done</b></div>
+            <div>Get your score + next step</div>
+          </div>
+
+          <h2 class="q">Where should I send your results + 7-Step Roadmap?</h2>
+
+          <div class="box">
+            <div class="formgrid">
+              <div class="row">
+                <input class="field" id="nameField" type="text" placeholder="Your first name" autocomplete="given-name" />
+                <input class="field" id="emailField" type="email" placeholder="Your email address" autocomplete="email" />
+              </div>
+
+              <select class="field" id="timelineField">
+                <option value="">Your rough timeline (optional)</option>
+                <option>0–3 months</option>
+                <option>3–6 months</option>
+                <option>6–12 months</option>
+                <option>12+ months / just exploring</option>
+              </select>
+
+              <div class="smallnote">
+                No spam. Just your score + a calm next step. (You can also skip and view results.)
+              </div>
+
+              <div id="formError" class="error hidden"></div>
+            </div>
+          </div>
+
+          <div class="nav">
+            <button class="btn secondary" id="skipBtn" type="button">Skip → See results</button>
+            <button class="btn primary" id="sendBtn" type="button">Send my results →</button>
+          </div>
+        </div>
+
+        <!-- RESULTS -->
+        <div id="resultsView" class="hidden">
+          <div class="meta">
+            <div><b>Results</b></div>
+            <div id="scoreRange">Total score: —</div>
+          </div>
+
+          <div class="box">
+            <div class="scoreline">
+              <div class="scorebig" id="scoreBig">—</div>
+              <div class="scoremax">out of <span id="maxScore">40</span></div>
+            </div>
+            <p class="rec" id="recText">—</p>
+            <p class="explain" id="explainText">—</p>
+          </div>
+
+          <div class="nav">
+            <button class="btn secondary" id="restartBtn" type="button">↻ Take it again</button>
+            <a class="btn primary" id="guideBtn" href="#" target="_blank" rel="noopener">Open 7-Step Roadmap →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot">Works best embedded in BoldTrail via iframe.</div>
+  </div>
+
+<script>
+(() => {
+  // ====== EDIT THIS ONE LINE AFTER YOU MAKE FORMSPREE ======
+  const FORMSPREE_ENDPOINT = "https://formspree.io/f/xxxxx";
+
+  // (Already set for you)
+  const GUIDE_URL = "https://www.downsizing123.ca/pages/your-7-steps-to-downsizing-roadmap/";
+
+  const quiz = [
+    { q:"How do you feel about the upkeep of your current home?",
+      a:[
+        {t:"Totally manageable", s:"I’m comfortable handling it.", v:1},
+        {t:"A bit tiring", s:"I can do it, but it’s wearing on me.", v:2},
+        {t:"Often overwhelming", s:"It’s a constant source of stress.", v:3},
+        {t:"Too much for me now", s:"I’m ready for easier living.", v:4},
+      ]},
+    { q:"How well does your home fit your day-to-day needs (stairs, layout, safety)?",
+      a:[
+        {t:"Fits perfectly", s:"No issues at all.", v:1},
+        {t:"Mostly fine", s:"A few minor concerns.", v:2},
+        {t:"Some real challenges", s:"Layout is starting to limit me.", v:3},
+        {t:"Not a good fit anymore", s:"I need a better match soon.", v:4},
+      ]},
+    { q:"How much of your home do you actually use?",
+      a:[
+        {t:"Most of it", s:"The space gets used regularly.", v:1},
+        {t:"Some areas sit empty", s:"A couple rooms aren’t used much.", v:2},
+        {t:"A lot is unused", s:"Several areas are basically storage.", v:3},
+        {t:"I live in a small portion", s:"The rest feels unnecessary now.", v:4},
+      ]},
+    { q:"How do you feel about your monthly housing costs (taxes, utilities, repairs)?",
+      a:[
+        {t:"Comfortable", s:"Costs feel predictable and fine.", v:1},
+        {t:"Noticeable", s:"Costs are rising, but manageable.", v:2},
+        {t:"Stressful at times", s:"I worry about bigger expenses.", v:3},
+        {t:"I want to reduce costs", s:"Lower overhead would help a lot.", v:4},
+      ]},
+    { q:"When you think about the future, what’s your gut feeling?",
+      a:[
+        {t:"Stay put", s:"I’m not considering change right now.", v:1},
+        {t:"Maybe later", s:"I can see it… just not yet.", v:2},
+        {t:"Soon", s:"It’s been on my mind frequently.", v:3},
+        {t:"Now feels right", s:"I want to move toward it.", v:4},
+      ]},
+    { q:"How interested are you in freeing up equity for lifestyle or peace of mind?",
+      a:[
+        {t:"Not important", s:"Equity isn’t a big factor for me.", v:1},
+        {t:"Somewhat", s:"Nice to have, not essential.", v:2},
+        {t:"Important", s:"It would reduce stress or add options.", v:3},
+        {t:"Very important", s:"It’s a key reason I’m considering it.", v:4},
+      ]},
+    { q:"How do you feel about the “stuff” in your home?",
+      a:[
+        {t:"Under control", s:"I’m organized and comfortable.", v:1},
+        {t:"A little too much", s:"I could declutter, but it’s fine.", v:2},
+        {t:"It weighs on me", s:"It’s becoming a mental burden.", v:3},
+        {t:"I want a reset", s:"I’m ready to simplify a lot.", v:4},
+      ]},
+    { q:"How does your home affect your time and energy?",
+      a:[
+        {t:"Gives me energy", s:"I enjoy taking care of it.", v:1},
+        {t:"Neutral", s:"It’s fine—just part of life.", v:2},
+        {t:"Drains me", s:"It takes more than it gives lately.", v:3},
+        {t:"Holds me back", s:"I feel stuck because of the home.", v:4},
+      ]},
+    { q:"If the right downsizing option appeared, how ready would you be to explore it?",
+      a:[
+        {t:"Not ready", s:"I wouldn’t take action.", v:1},
+        {t:"Curious", s:"I’d look, but no urgency.", v:2},
+        {t:"Open and interested", s:"I’d seriously consider it.", v:3},
+        {t:"Ready to act", s:"I’d want a plan and next steps.", v:4},
+      ]},
+    { q:"What would downsizing most likely bring you?",
+      a:[
+        {t:"Not much change", s:"I’m happy with things as-is.", v:1},
+        {t:"Some convenience", s:"It might make life a bit easier.", v:2},
+        {t:"Meaningful relief", s:"Less stress and more freedom.", v:3},
+        {t:"A better life chapter", s:"I’m ready for simpler, calmer living.", v:4},
+      ]},
+  ];
+
+  const maxScore = quiz.length * 4;
+  document.getElementById("qTotal").textContent = quiz.length;
+  document.getElementById("maxScore").textContent = maxScore;
+  document.getElementById("guideBtn").href = GUIDE_URL;
+
+  const progressFill = document.getElementById("progressFill");
+  const scorePill = document.getElementById("scorePill");
+  const qNumEl = document.getElementById("qNum");
+  const qTextEl = document.getElementById("qText");
+  const answersEl = document.getElementById("answers");
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  const hint = document.getElementById("hint");
+
+  const quizView = document.getElementById("quizView");
+  const leadView = document.getElementById("leadView");
+  const resultsView = document.getElementById("resultsView");
+
+  const nameField = document.getElementById("nameField");
+  const emailField = document.getElementById("emailField");
+  const timelineField = document.getElementById("timelineField");
+  const formError = document.getElementById("formError");
+  const skipBtn = document.getElementById("skipBtn");
+  const sendBtn = document.getElementById("sendBtn");
+
+  const scoreRange = document.getElementById("scoreRange");
+  const scoreBig = document.getElementById("scoreBig");
+  const recText = document.getElementById("recText");
+  const explainText = document.getElementById("explainText");
+  const restartBtn = document.getElementById("restartBtn");
+
+  let index = 0;
+  let answers = Array(quiz.length).fill(null);
+
+  const totalScore = () => answers.reduce((s,v)=>s+(v??0),0);
+
+  function updateHeader(){
+    scorePill.textContent = `Score: ${totalScore()}`;
+    const pct = Math.round((index/quiz.length)*100);
+    progressFill.style.width = pct + "%";
+  }
+
+  function render(){
+    updateHeader();
+    const q = quiz[index];
+
+    qNumEl.textContent = `Question ${index+1}`;
+    qTextEl.textContent = q.q;
+
+    prevBtn.disabled = (index === 0);
+
+    answersEl.innerHTML = "";
+    const selected = answers[index];
+
+    q.a.forEach(opt=>{
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "ans" + (selected===opt.v ? " selected":"");
+      btn.innerHTML = `<span class="dot" aria-hidden="true"></span>
+                       <span class="label">${opt.t}<span class="subline">${opt.s}</span></span>`;
+      btn.addEventListener("click", ()=>{
+        answers[index] = opt.v;
+        [...answersEl.querySelectorAll(".ans")].forEach(x=>x.classList.remove("selected"));
+        btn.classList.add("selected");
+        nextBtn.disabled = false;
+        hint.textContent = "Nice — you can go to the next question";
+        scorePill.textContent = `Score: ${totalScore()}`;
+      });
+      answersEl.appendChild(btn);
+    });
+
+    nextBtn.textContent = (index === quiz.length - 1) ? "Continue →" : "Next →";
+    nextBtn.disabled = (answers[index] === null);
+    hint.textContent = (answers[index] === null) ? "Choose one option to continue" : "You can change your answer anytime";
+  }
+
+  function showLeadCapture(){
+    quizView.classList.add("hidden");
+    leadView.classList.remove("hidden");
+    resultsView.classList.add("hidden");
+    progressFill.style.width = "100%";
+    window.scrollTo({top:0, behavior:"smooth"});
+  }
+
+  function showResults(){
+    const score = totalScore();
+    const pct = Math.round((score / maxScore) * 100);
+
+    let headline="", explain="";
+    if(score <= 19){
+      headline = "You’re probably not ready yet — but you can plan calmly.";
+      explain = "Your home still fits in many ways. Next step: learn your options + costs so you stay in control without rushing.";
+    } else if(score <= 29){
+      headline = "You’re in the planning zone — a few right steps will bring clarity.";
+      explain = "You’re feeling friction (space, upkeep, costs, or future fit). Next step: explore right-size options and map a comfortable timeline.";
+    } else {
+      headline = "It looks like a good time to downsize — you’re ready for simpler living.";
+      explain = "Your answers suggest downsizing would reduce stress and improve day-to-day life. Next step: pick your ideal home style and build a calm transition plan.";
+    }
+
+    scoreRange.textContent = `Total score: ${score} / ${maxScore} (${pct}%)`;
+    scoreBig.textContent = score;
+    recText.textContent = headline;
+    explainText.textContent = explain;
+
+    quizView.classList.add("hidden");
+    leadView.classList.add("hidden");
+    resultsView.classList.remove("hidden");
+    window.scrollTo({top:0, behavior:"smooth"});
+  }
+
+  async function submitLeadIfPossible(){
+    const name = (nameField.value || "").trim();
+    const email = (emailField.value || "").trim();
+    const timeline = (timelineField.value || "").trim();
+
+    formError.classList.add("hidden");
+    formError.textContent = "";
+
+    if(!name && !email) return { skipped:true };
+
+    if(email && !/^\S+@\S+\.\S+$/.test(email)){
+      return { error: "Please enter a valid email address (example: name@email.com)." };
+    }
+    if(name && !email){
+      return { error: "Please add your email so I can send your results + the 7-Step Roadmap." };
+    }
+
+    if(!FORMSPREE_ENDPOINT || FORMSPREE_ENDPOINT.includes("xxxxx")){
+      return { warn: "Form is not connected yet (Formspree endpoint missing). Results will still show." };
+    }
+
+    const payload = {
+      name, email, timeline,
+      score: totalScore(),
+      answers: answers.join(","),
+      page: window.location.href,
+      source: "Primary Downsizing Quiz (GitHub Pages embed)"
+    };
+
+    try{
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: { "Accept":"application/json", "Content-Type":"application/json" },
+        body: JSON.stringify(payload)
+      });
+      if(res.ok) return { ok:true };
+      return { error: "The form didn’t send. Please try again, or click “Skip → See results”." };
+    }catch(e){
+      return { error: "Network issue — please try again, or click “Skip → See results”." };
+    }
+  }
+
+  function goNext(){
+    if(answers[index] === null) return;
+
+    if(index < quiz.length - 1){
+      index++;
+      render();
+      window.scrollTo({top:0, behavior:"smooth"});
+    } else {
+      showLeadCapture();
+    }
+  }
+
+  function goPrev(){
+    if(index > 0){
+      index--;
+      render();
+      window.scrollTo({top:0, behavior:"smooth"});
+    }
+  }
+
+  function restart(){
+    index = 0;
+    answers = Array(quiz.length).fill(null);
+    quizView.classList.remove("hidden");
+    leadView.classList.add("hidden");
+    resultsView.classList.add("hidden");
+    progressFill.style.width = "0%";
+    render();
+    window.scrollTo({top:0, behavior:"smooth"});
+  }
+
+  prevBtn.addEventListener("click", goPrev);
+  nextBtn.addEventListener("click", goNext);
+  skipBtn.addEventListener("click", showResults);
+  restartBtn.addEventListener("click", restart);
+
+  sendBtn.addEventListener("click", async ()=>{
+    sendBtn.disabled = true;
+    sendBtn.textContent = "Sending…";
+
+    const result = await submitLeadIfPossible();
+
+    sendBtn.disabled = false;
+    sendBtn.textContent = "Send my results →";
+
+    if(result?.error){
+      formError.textContent = result.error;
+      formError.classList.remove("hidden");
+      return;
+    }
+    showResults();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
