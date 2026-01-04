@@ -208,11 +208,13 @@ body{
       <div class="brand">
         <div class="badge">✓</div>
         <div>
-          <div class="bt1">Downsizing Timing Quiz</div>
-          <div class="bt2">Maple Ridge + Fraser Valley • 10 quick questions</div>
+          <div class="bt1">Downsizing Questionnaire</div>
+<div class="bt2">2-minute quiz • Maple Ridge + Surrounding Areas • 10 quick questions</div>
+
         </div>
       </div>
-      <div class="pill" id="scorePill">Score: 0</div>
+      <div class="pill" id<div class="pill" id="scorePill">Score: 0 • 0%</div>
+="scorePill">Score: 0</div>
     </div>
 
     <div class="card">
@@ -422,11 +424,12 @@ body{
 
   const totalScore = () => answers.reduce((s,v)=>s+(v??0),0);
 
-  function updateHeader(){
-    scorePill.textContent = `Score: ${totalScore()}`;
-    const pct = Math.round((index/quiz.length)*100);
-    progressFill.style.width = pct + "%";
-  }
+function updateHeader(){
+  const pct = Math.round((index/quiz.length)*100);
+  scorePill.textContent = `Score: ${totalScore()} • ${pct}%`;
+  progressFill.style.width = pct + "%";
+}
+
 
   function render(){
     updateHeader();
@@ -446,14 +449,23 @@ body{
       btn.className = "ans" + (selected===opt.v ? " selected":"");
       btn.innerHTML = `<span class="dot" aria-hidden="true"></span>
                        <span class="label">${opt.t}<span class="subline">${opt.s}</span></span>`;
-      btn.addEventListener("click", ()=>{
-        answers[index] = opt.v;
-        [...answersEl.querySelectorAll(".ans")].forEach(x=>x.classList.remove("selected"));
-        btn.classList.add("selected");
-        nextBtn.disabled = false;
-        hint.textContent = "Nice — you can go to the next question";
-        scorePill.textContent = `Score: ${totalScore()}`;
-      });
+     btn.addEventListener("click", ()=>{
+  answers[index] = opt.v;
+  [...answersEl.querySelectorAll(".ans")].forEach(x=>x.classList.remove("selected"));
+  btn.classList.add("selected");
+
+  nextBtn.disabled = false;
+  hint.textContent = "Nice — moving to the next question…";
+
+  // Update header (score + %)
+  updateHeader();
+
+  // Auto-advance (tiny delay so the selection shows)
+  setTimeout(() => {
+    goNext();
+  }, 180);
+});
+
       answersEl.appendChild(btn);
     });
 
