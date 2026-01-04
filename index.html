@@ -3,251 +3,343 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Primary Downsizing Quiz</title>
+  <title>Downsizing Questionnaire</title>
 
   <style>
     :root{
-      --blue:#00008b;
-      --yellow:#f2d61f;
-      --white:#ffffff;
-      --grey:#2b2b2b;
-      --muted:#586070;
-      --shadow: 0 18px 50px rgba(0,0,0,.12);
-      --radius: 22px;
-      --border: rgba(43,43,43,.14);
+      --blue:#2f2fd6;
+      --ink:#111827;
+      --text:#2b2b2b;
+      --muted:#4b5563;
+      --card:#ffffff;
+      --border: rgba(17,24,39,.12);
+      --shadow: 0 14px 40px rgba(0,0,0,.10);
+      --radius: 18px;
     }
-    *{box-sizing:border-box}
-body{
-  margin:0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-  font-size:18px;               /* ← BASE FONT SIZE */
-  color:#2b2b2b;
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:12px;                 /* smaller padding = less scrolling */
-  background:
-    linear-gradient(
-      180deg,
-      #f8fafc 0%,
-      #eef2f7 100%
-    );
-}
 
+    *{ box-sizing:border-box; }
 
-   .wrap{
-  width:min(920px, 100%);
-  display:grid;
-  gap:10px;
-}
+    /* Base typography: smallest text >= 18px */
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      font-size:18px;
+      color: var(--text);
+      background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+      padding:12px;
+      display:flex;
+      justify-content:center;
+    }
 
+    .wrap{
+      width:min(920px, 100%);
+      display:grid;
+      gap:10px;
+    }
+
+    /* Header card (always visible, mobile friendly) */
     .topbar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  flex-wrap:wrap;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,.08);
+      padding: 12px 14px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+    }
 
-  color:#1f2937;                 /* dark readable text */
-  background:#ffffff;            /* white card */
-  border-radius:16px;
-  padding:12px 14px;
-  box-shadow:0 8px 20px rgba(0,0,0,.08);
-}
-
-    .brand{ display:flex; align-items:center; gap:10px; }
     .badge{
       width:38px;height:38px;border-radius:12px;
-      background: linear-gradient(135deg, var(--yellow), #ffe770);
-      display:grid;place-items:center;color:#141414;font-weight:900;
-      box-shadow: 0 10px 22px rgba(242,214,31,.18);
+      background: linear-gradient(135deg, #dbeafe, #eff6ff);
+      border: 1px solid rgba(17,24,39,.10);
+      display:grid;place-items:center;
+      color: var(--ink);
+      font-weight:900;
+      flex: 0 0 auto;
     }
+
+    .titleblock{ display:grid; gap:2px; }
     .bt1{
-  font-size:20px;
-  font-weight:900;
-  color:#0f172a;
-}
-
-.bt2{
-  font-size:18px;
-  color:#4b5563;
-}
-
-    .pill{
-      font-size:12px;font-weight:900;
-      padding:8px 12px;border-radius:999px;
-      background: rgba(255,255,255,.10);
-      border: 1px solid rgba(255,255,255,.14);
-      backdrop-filter: blur(8px);
+      font-size:22px;
+      font-weight:950;
+      color: var(--ink);
+      letter-spacing:-.2px;
+      line-height:1.1;
+    }
+    .bt2{
+      font-size:18px;
+      color: var(--muted);
+      line-height:1.25;
     }
 
     .card{
-      background: var(--white);
+      background: var(--card);
+      border: 1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       overflow:hidden;
-      border: 1px solid rgba(255,255,255,.16);
     }
+
+    /* Compact progress header inside card */
     .head{
-      padding: 20px 22px 14px;
-      background: linear-gradient(135deg, rgba(0,0,139,.07), rgba(242,214,31,.14));
-      border-bottom: 1px solid rgba(43,43,43,.10);
+      padding: 12px 14px 12px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(47,47,214,.06), rgba(255,255,255,.0));
     }
-    .h1{margin:0 0 6px;font-size:22px;font-weight:950;letter-spacing:-.3px;color:#111827}
-    .sub{margin:0;color:var(--muted);font-size:14px;line-height:1.45}
-    .progress{margin-top:14px;height:10px;border-radius:999px;background: rgba(43,43,43,.12);overflow:hidden}
+
+    .headrow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .meta{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      color: var(--muted);
+      font-size:18px; /* keep >=18 */
+      line-height:1.2;
+    }
+    .meta b{ color: var(--ink); }
+
+    .progressText{
+      font-weight:950;
+      color: var(--ink);
+    }
+
+    .progress{
+      margin-top:10px;
+      height:10px;
+      border-radius:999px;
+      background: rgba(17,24,39,.10);
+      overflow:hidden;
+    }
     .progress > div{
-      height:100%;width:0%;
-      background: linear-gradient(90deg, var(--blue), #2f2fd6, var(--yellow));
-      border-radius:999px;transition: width .35s ease;
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, #60a5fa, var(--blue));
+      border-radius:999px;
+      transition: width .25s ease;
     }
 
-    .body{
-  padding: 14px;
-}
+    .body{ padding: 12px 14px 14px; }
 
-    .meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:13px;margin-bottom:10px}
-    .meta b{color:#111827}
-    .q{margin:0 0 14px;font-size:18px;font-weight:950;letter-spacing:-.2px;color:#0f172a}
+    .hint{
+      color: var(--muted);
+      font-size:18px;
+      margin: 6px 0 10px;
+      line-height:1.25;
+    }
 
-    .answers{display:grid;gap:10px}
+    .q{
+      margin: 0 0 10px;
+      font-size:20px;
+      font-weight:950;
+      color: var(--ink);
+      letter-spacing:-.2px;
+      line-height:1.2;
+    }
+
+    /* Answers */
+    .answers{ display:grid; gap:8px; }
+
     .ans{
-      width:100%;text-align:left;
-      padding:14px 14px;border-radius:16px;
-      border: 1px solid rgba(43,43,43,.14);
-      background:#fff;cursor:pointer;
-      display:flex;gap:12px;align-items:flex-start;
-      transition: transform .05s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
+      width:100%;
+      text-align:left;
+      padding:12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(17,24,39,.16);
+      background:#fff;
+      cursor:pointer;
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      transition: box-shadow .2s ease, border-color .2s ease;
     }
-    .ans:hover{border-color: rgba(0,0,139,.40); box-shadow: 0 12px 26px rgba(0,0,0,.10); transform: translateY(-1px);}
-    .ans:active{transform: translateY(0px);}
+    .ans:hover{
+      border-color: rgba(47,47,214,.45);
+      box-shadow: 0 10px 22px rgba(0,0,0,.08);
+    }
+
     .dot{
       width:18px;height:18px;border-radius:50%;
-      border:2px solid rgba(43,43,43,.25);
-      margin-top:2px;position:relative;flex:0 0 auto;background:#fff;
+      border:2px solid rgba(17,24,39,.25);
+      margin-top:2px;
+      flex: 0 0 auto;
+      position:relative;
+      background:#fff;
     }
     .ans.selected{
-      border-color: rgba(0,0,139,.62);
-      background: linear-gradient(135deg, rgba(0,0,139,.05), rgba(242,214,31,.12));
+      border-color: rgba(47,47,214,.55);
+      background: linear-gradient(135deg, rgba(47,47,214,.05), rgba(96,165,250,.10));
     }
-    .ans.selected .dot{border-color: var(--blue);}
+    .ans.selected .dot{
+      border-color: var(--blue);
+    }
     .ans.selected .dot::after{
-      content:""; position:absolute; inset:3px; border-radius:50%;
-      background: linear-gradient(135deg, var(--blue), var(--yellow));
+      content:"";
+      position:absolute;
+      inset:3px;
+      border-radius:50%;
+      background: linear-gradient(135deg, #60a5fa, var(--blue));
     }
-    .label{font-weight:900;color:#111827;line-height:1.25}
-    .subline{display:block;margin-top:4px;font-weight:650;color:var(--muted);font-size:13px;line-height:1.35}
 
-    .nav{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+    .label{
+      font-weight:900;
+      color: var(--ink);
+      line-height:1.2;
+      font-size:18px;
+    }
+    .subline{
+      display:block;
+      margin-top:3px;
+      font-weight:650;
+      color: var(--muted);
+      font-size:18px;
+      line-height:1.25;
+    }
+
+    /* Nav */
+    .nav{
+      display:flex;
+      gap:10px;
+      margin-top:12px;
+      flex-wrap:wrap;
+    }
     .btn{
-      border:0;padding:12px 14px;border-radius:14px;
-      cursor:pointer;font-weight:950;letter-spacing:.1px;
-      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      border:0;
+      padding:12px 14px;
+      border-radius: 14px;
+      cursor:pointer;
+      font-weight:950;
+      font-size:18px;
       min-width: 140px;
-      transition: transform .05s ease, opacity .2s ease, box-shadow .2s ease;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
     }
-    .btn:active{transform: translateY(1px);}
-    .btn.secondary{background: rgba(43,43,43,.08);color:#111827;}
+    .btn.secondary{
+      background: rgba(17,24,39,.08);
+      color: var(--ink);
+    }
     .btn.primary{
-      background: linear-gradient(135deg, var(--blue), #2f2fd6);
-      color:#fff; box-shadow: 0 14px 30px rgba(0,0,139,.18);
+      background: linear-gradient(135deg, var(--blue), #60a5fa);
+      color: #fff;
     }
-    .btn.primary:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+    .btn.primary:disabled{
+      opacity:.45;
+      cursor:not-allowed;
+    }
 
-    .hidden{display:none !important;}
+    .hidden{ display:none !important; }
 
+    /* Lead + Results boxes */
     .box{
-      border-radius: 18px;
-      padding: 16px;
-      border: 1px solid rgba(43,43,43,.12);
-      background: linear-gradient(135deg, rgba(0,0,139,.06), rgba(242,214,31,.14));
-      margin: 14px 0 14px;
+      border-radius: 16px;
+      padding: 14px;
+      border: 1px solid rgba(17,24,39,.12);
+      background: linear-gradient(135deg, rgba(96,165,250,.10), rgba(255,255,255,.0));
+      margin: 10px 0 12px;
     }
-    .scoreline{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
-    .scorebig{font-size:34px;font-weight:990;letter-spacing:-.6px;color:#0f172a}
-    .scoremax{color:var(--muted);font-weight:850}
-    .rec{margin:10px 0 0;font-size:16px;font-weight:990;color:#111827}
-    .explain{margin:8px 0 0;color:var(--muted);font-weight:650;line-height:1.55;font-size:14px}
 
-    .formgrid{display:grid;gap:10px;margin-top:12px}
-    .row{display:grid;grid-template-columns: 1fr 1fr;gap:10px}
-    @media (max-width: 640px){ .row{grid-template-columns:1fr;} }
     .field{
       width:100%;
       padding:12px 12px;
-      border-radius:14px;
-      border:1px solid rgba(43,43,43,.16);
-      font-size:14px;
+      border-radius: 14px;
+      border: 1px solid rgba(17,24,39,.16);
+      font-size:18px;
       outline:none;
     }
-    .field:focus{border-color: rgba(0,0,139,.45); box-shadow: 0 0 0 4px rgba(0,0,139,.08);}
-    .smallnote{font-size:12px;color:var(--muted);line-height:1.4;margin:8px 0 0}
-    .error{color:#b00020;font-weight:800;font-size:13px;margin-top:10px}
-
-    a.btn{ text-decoration:none; }
-
-    .foot{
-      font-size:12px;color: rgba(255,255,255,.72);
-      text-align:center;
+    .field:focus{
+      border-color: rgba(47,47,214,.45);
+      box-shadow: 0 0 0 4px rgba(47,47,214,.10);
     }
-    @media (max-width: 600px){
-  .q{ font-size:20px; }
-  .label{ font-size:18px; }
-  .subline{ font-size:18px; }
-  .btn{ padding:14px; font-size:18px; }
-  .topbar{ padding:12px; }
-}
-@media (max-width: 600px){
-  .topbar{
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-  .brand{
-    justify-content: center;
-    width: 100%;
-  }
-}
 
+    .formgrid{ display:grid; gap:10px; }
+    .row{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
+    @media (max-width:640px){ .row{ grid-template-columns:1fr; } }
+
+    .smallnote{
+      font-size:18px;
+      color: var(--muted);
+      line-height:1.3;
+      margin: 6px 0 0;
+    }
+    .error{
+      color:#b00020;
+      font-weight:900;
+      font-size:18px;
+      margin-top:10px;
+    }
+
+    .scorebig{
+      font-size:34px;
+      font-weight:990;
+      color: var(--ink);
+      letter-spacing:-.6px;
+    }
+    .rec{
+      margin:10px 0 0;
+      font-size:18px;
+      font-weight:990;
+      color: var(--ink);
+      line-height:1.25;
+    }
+    .explain{
+      margin:8px 0 0;
+      font-size:18px;
+      color: var(--muted);
+      font-weight:650;
+      line-height:1.35;
+    }
+
+    /* Mobile: keep everything on screen */
+    @media (max-width:600px){
+      body{ padding:10px; }
+      .topbar{ padding:12px; }
+      .bt1{ font-size:22px; }
+      .q{ font-size:20px; }
+      .ans{ padding:12px; }
+      .nav{ margin-top:10px; }
+    }
   </style>
 </head>
 
 <body>
   <div class="wrap">
+
+    <!-- ONE title only -->
     <div class="topbar">
-      <div class="brand">
-        <div class="badge">✓</div>
-        <div>
-          <div class="bt1">Downsizing Questionnaire</div>
-<div class="bt2">2-minute quiz • Maple Ridge + Surrounding Areas • 10 quick questions</div>
-
-        </div>
+      <div class="badge">✓</div>
+      <div class="titleblock">
+        <div class="bt1">Downsizing Questionnaire</div>
+        <div class="bt2">2-minute quiz • Maple Ridge + Surrounding Areas • 10 quick questions</div>
       </div>
-
+    </div>
 
     <div class="card">
-<div class="head">
-  <h1 class="h1">Downsizing Timing Quiz</h1>
-  <p class="sub">2-minute quiz • Maple Ridge + Fraser Valley • 10 quick questions</p>
-
-  <div class="meta" style="margin-top:10px;">
-    <div><b id="qNum">Question 1</b> of <span id="qTotal">10</span></div>
-    <div id="progressText">0%</div>
-  </div>
-
-  <div class="progress" aria-label="Progress"><div id="progressFill"></div></div>
-</div>
-
+      <div class="head">
+        <div class="headrow">
+          <div class="meta">
+            <div><b id="qNum">Question 1</b> of <span id="qTotal">10</span></div>
+          </div>
+          <div class="progressText" id="progressText">0%</div>
+        </div>
+        <div class="progress" aria-label="Progress"><div id="progressFill"></div></div>
+      </div>
 
       <div class="body">
         <!-- QUIZ -->
         <div id="quizView">
-          <div class="meta">
-            <div><b id="qNum">Question 1</b> of <span id="qTotal">10</span></div>
-            <div id="hint">Choose one option to continue</div>
-          </div>
-
+          <div class="hint" id="hint">Choose one option to continue</div>
           <h2 class="q" id="qText"></h2>
           <div class="answers" id="answers"></div>
 
@@ -259,11 +351,6 @@ body{
 
         <!-- LEAD CAPTURE -->
         <div id="leadView" class="hidden">
-          <div class="meta">
-            <div><b>Almost done</b></div>
-            <div>Get your score + next step</div>
-          </div>
-
           <h2 class="q">Where should I send your results + 7-Step Roadmap?</h2>
 
           <div class="box">
@@ -282,7 +369,7 @@ body{
               </select>
 
               <div class="smallnote">
-                No spam. Just your score + a calm next step. (You can also skip and view results.)
+                No spam. Just your results and a calm next step. (You can also skip and view results.)
               </div>
 
               <div id="formError" class="error hidden"></div>
@@ -297,16 +384,8 @@ body{
 
         <!-- RESULTS -->
         <div id="resultsView" class="hidden">
-          <div class="meta">
-            <div><b>Results</b></div>
-            <div id="scoreRange">Total score: —</div>
-          </div>
-
           <div class="box">
-            <div class="scoreline">
-              <div class="scorebig" id="scoreBig">—</div>
-              <div class="scoremax">out of <span id="maxScore">40</span></div>
-            </div>
+            <div class="scorebig" id="scoreBig">—</div>
             <p class="rec" id="recText">—</p>
             <p class="explain" id="explainText">—</p>
           </div>
@@ -316,20 +395,16 @@ body{
             <a class="btn primary" id="guideBtn" href="#" target="_blank" rel="noopener">Open 7-Step Roadmap →</a>
           </div>
         </div>
+
       </div>
     </div>
-
-    <div class="foot">Works best embedded in BoldTrail via iframe.</div>
   </div>
 
 <script>
 (() => {
-  // ====== EDIT THIS ONE LINE AFTER YOU MAKE FORMSPREE ======
-  const FORMSPREE_ENDPOINT = "https://formspree.io/f/xxxxx";
-
-  // (Already set for you)
+  // Set these:
+  const FORMSPREE_ENDPOINT = "https://formspree.io/f/xxxxx"; // <-- replace with yours when ready
   const GUIDE_URL = "https://downsizing123.my.canva.site/7-step-downsizing-roadmap";
-
 
   const quiz = [
     { q:"How do you feel about the upkeep of your current home?",
@@ -404,19 +479,16 @@ body{
       ]},
   ];
 
-  const maxScore = quiz.length * 4;
-  document.getElementById("qTotal").textContent = quiz.length;
-  document.getElementById("maxScore").textContent = maxScore;
-  document.getElementById("guideBtn").href = GUIDE_URL;
-
-  const progressFill = document.getElementById("progressFill");
-  const progressText = document.getElementById("progressText");
+  // Elements
   const qNumEl = document.getElementById("qNum");
+  const qTotalEl = document.getElementById("qTotal");
   const qTextEl = document.getElementById("qText");
   const answersEl = document.getElementById("answers");
   const prevBtn = document.getElementById("prevBtn");
   const nextBtn = document.getElementById("nextBtn");
-  const hint = document.getElementById("hint");
+  const hintEl = document.getElementById("hint");
+  const progressFill = document.getElementById("progressFill");
+  const progressText = document.getElementById("progressText");
 
   const quizView = document.getElementById("quizView");
   const leadView = document.getElementById("leadView");
@@ -429,30 +501,31 @@ body{
   const skipBtn = document.getElementById("skipBtn");
   const sendBtn = document.getElementById("sendBtn");
 
-  const scoreRange = document.getElementById("scoreRange");
   const scoreBig = document.getElementById("scoreBig");
   const recText = document.getElementById("recText");
   const explainText = document.getElementById("explainText");
   const restartBtn = document.getElementById("restartBtn");
+  const guideBtn = document.getElementById("guideBtn");
+  guideBtn.href = GUIDE_URL;
+
+  qTotalEl.textContent = quiz.length;
 
   let index = 0;
   let answers = Array(quiz.length).fill(null);
 
   const totalScore = () => answers.reduce((s,v)=>s+(v??0),0);
+  const maxScore = quiz.length * 4;
 
-function updateHeader(){
-  // percent based on question position (clean + predictable)
-  const pct = Math.round((index/quiz.length)*100);
-  progressFill.style.width = pct + "%";
-  if(progressText) progressText.textContent = `${pct}%`;
-}
-
-
+  function setProgress(){
+    // 0% at Q1, 100% after Q10 answered
+    const pct = Math.round((index / quiz.length) * 100);
+    progressFill.style.width = pct + "%";
+    progressText.textContent = pct + "%";
+  }
 
   function render(){
-    updateHeader();
+    setProgress();
     const q = quiz[index];
-
     qNumEl.textContent = `Question ${index+1}`;
     qTextEl.textContent = q.q;
 
@@ -461,42 +534,41 @@ function updateHeader(){
     answersEl.innerHTML = "";
     const selected = answers[index];
 
-    q.a.forEach(opt=>{
+    q.a.forEach(opt => {
       const btn = document.createElement("button");
       btn.type = "button";
-      btn.className = "ans" + (selected===opt.v ? " selected":"");
+      btn.className = "ans" + (selected === opt.v ? " selected" : "");
       btn.innerHTML = `<span class="dot" aria-hidden="true"></span>
                        <span class="label">${opt.t}<span class="subline">${opt.s}</span></span>`;
-     btn.addEventListener("click", ()=>{
-  answers[index] = opt.v;
-  [...answersEl.querySelectorAll(".ans")].forEach(x=>x.classList.remove("selected"));
-  btn.classList.add("selected");
 
-  nextBtn.disabled = false;
-  hint.textContent = "Nice — moving to the next question…";
+      btn.addEventListener("click", () => {
+        answers[index] = opt.v;
 
-  // Update header (score + %)
-  updateHeader();
+        [...answersEl.querySelectorAll(".ans")].forEach(x => x.classList.remove("selected"));
+        btn.classList.add("selected");
 
-  // Auto-advance (tiny delay so the selection shows)
-  setTimeout(() => {
-    goNext();
-  }, 180);
-});
+        nextBtn.disabled = false;
+        hintEl.textContent = "Moving to the next question…";
+
+        // auto-advance after a tiny delay
+        setTimeout(() => goNext(), 180);
+      });
 
       answersEl.appendChild(btn);
     });
 
     nextBtn.textContent = (index === quiz.length - 1) ? "Continue →" : "Next →";
     nextBtn.disabled = (answers[index] === null);
-    hint.textContent = (answers[index] === null) ? "Choose one option to continue" : "You can change your answer anytime";
+    hintEl.textContent = (answers[index] === null) ? "Choose one option to continue" : "You can change your answer anytime";
   }
 
   function showLeadCapture(){
     quizView.classList.add("hidden");
     leadView.classList.remove("hidden");
     resultsView.classList.add("hidden");
+
     progressFill.style.width = "100%";
+    progressText.textContent = "100%";
     window.scrollTo({top:0, behavior:"smooth"});
   }
 
@@ -507,7 +579,7 @@ function updateHeader(){
     let headline="", explain="";
     if(score <= 19){
       headline = "You’re probably not ready yet — but you can plan calmly.";
-      explain = "Your home still fits in many ways. Next step: learn your options + costs so you stay in control without rushing.";
+      explain = "Your home still fits in many ways. Next step: learn your options so you stay in control without rushing.";
     } else if(score <= 29){
       headline = "You’re in the planning zone — a few right steps will bring clarity.";
       explain = "You’re feeling friction (space, upkeep, costs, or future fit). Next step: explore right-size options and map a comfortable timeline.";
@@ -516,8 +588,7 @@ function updateHeader(){
       explain = "Your answers suggest downsizing would reduce stress and improve day-to-day life. Next step: pick your ideal home style and build a calm transition plan.";
     }
 
-    scoreRange.textContent = `Total score: ${score} / ${maxScore} (${pct}%)`;
-    scoreBig.textContent = score;
+    scoreBig.textContent = `${score} / ${maxScore} (${pct}%)`;
     recText.textContent = headline;
     explainText.textContent = explain;
 
@@ -535,6 +606,7 @@ function updateHeader(){
     formError.classList.add("hidden");
     formError.textContent = "";
 
+    // allow skip
     if(!name && !email) return { skipped:true };
 
     if(email && !/^\S+@\S+\.\S+$/.test(email)){
@@ -553,7 +625,7 @@ function updateHeader(){
       score: totalScore(),
       answers: answers.join(","),
       page: window.location.href,
-      source: "Primary Downsizing Quiz (GitHub Pages embed)"
+      source: "Downsizing Questionnaire (GitHub Pages embed)"
     };
 
     try{
@@ -592,10 +664,13 @@ function updateHeader(){
   function restart(){
     index = 0;
     answers = Array(quiz.length).fill(null);
+
     quizView.classList.remove("hidden");
     leadView.classList.add("hidden");
     resultsView.classList.add("hidden");
+
     progressFill.style.width = "0%";
+    progressText.textContent = "0%";
     render();
     window.scrollTo({top:0, behavior:"smooth"});
   }
