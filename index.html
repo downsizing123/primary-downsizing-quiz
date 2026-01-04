@@ -198,6 +198,17 @@ body{
   .btn{ padding:14px; font-size:18px; }
   .topbar{ padding:12px; }
 }
+@media (max-width: 600px){
+  .topbar{
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .brand{
+    justify-content: center;
+    width: 100%;
+  }
+}
 
   </style>
 </head>
@@ -213,16 +224,23 @@ body{
 
         </div>
       </div>
-      <div class="pill" id<div class="pill" id="scorePill">Score: 0 • 0%</div>
+      <div class="pill" id
 ="scorePill">Score: 0</div>
     </div>
 
     <div class="card">
-      <div class="head">
-        <h1 class="h1">Is it the right time to downsize?</h1>
-        <p class="sub">Answer honestly. This gives you clarity on your best next step: <b>stay</b>, <b>plan</b>, or <b>move forward calmly</b>.</p>
-        <div class="progress" aria-label="Progress"><div id="progressFill"></div></div>
-      </div>
+<div class="head">
+  <h1 class="h1">Downsizing Timing Quiz</h1>
+  <p class="sub">2-minute quiz • Maple Ridge + Fraser Valley • 10 quick questions</p>
+
+  <div class="meta" style="margin-top:10px;">
+    <div><b id="qNum">Question 1</b> of <span id="qTotal">10</span></div>
+    <div id="progressText">0%</div>
+  </div>
+
+  <div class="progress" aria-label="Progress"><div id="progressFill"></div></div>
+</div>
+
 
       <div class="body">
         <!-- QUIZ -->
@@ -394,7 +412,7 @@ body{
   document.getElementById("guideBtn").href = GUIDE_URL;
 
   const progressFill = document.getElementById("progressFill");
-  const scorePill = document.getElementById("scorePill");
+  const progressText = document.getElementById("progressText");
   const qNumEl = document.getElementById("qNum");
   const qTextEl = document.getElementById("qText");
   const answersEl = document.getElementById("answers");
@@ -425,10 +443,12 @@ body{
   const totalScore = () => answers.reduce((s,v)=>s+(v??0),0);
 
 function updateHeader(){
+  // percent based on question position (clean + predictable)
   const pct = Math.round((index/quiz.length)*100);
-  scorePill.textContent = `Score: ${totalScore()} • ${pct}%`;
   progressFill.style.width = pct + "%";
+  if(progressText) progressText.textContent = `${pct}%`;
 }
+
 
 
   function render(){
