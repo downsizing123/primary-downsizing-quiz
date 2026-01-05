@@ -347,9 +347,15 @@
           <div class="box">
             <div class="formgrid">
               <div class="row">
-                <input class="field" id="nameField" type="text" placeholder="Your first name" autocomplete="given-name" />
-                <input class="field" id="emailField" type="email" placeholder="Your email address" autocomplete="email" />
-              </div>
+  <input class="field" id="nameField" type="text" placeholder="First name" autocomplete="given-name" />
+  <input class="field" id="lastNameField" type="text" placeholder="Last name (optional)" autocomplete="family-name" />
+</div>
+
+<div class="row">
+  <input class="field" id="emailField" type="email" placeholder="Email address" autocomplete="email" />
+  <input class="field" id="phoneField" type="tel" placeholder="Phone number (optional)" autocomplete="tel" />
+</div>
+
 
               <select class="field" id="timelineField">
                 <option value="">Your rough timeline (optional)</option>
@@ -486,6 +492,9 @@
   const nameField = document.getElementById("nameField");
   const emailField = document.getElementById("emailField");
   const timelineField = document.getElementById("timelineField");
+  const lastNameField = document.getElementById("lastNameField");
+const phoneField = document.getElementById("phoneField");
+
   const formError = document.getElementById("formError");
   const skipBtn = document.getElementById("skipBtn");
   const sendBtn = document.getElementById("sendBtn");
@@ -588,8 +597,11 @@
 
   async function submitLeadIfPossible(){
     const name = (nameField.value || "").trim();
-    const email = (emailField.value || "").trim();
-    const timeline = (timelineField.value || "").trim();
+const lastName = (lastNameField?.value || "").trim();
+const email = (emailField.value || "").trim();
+const phone = (phoneField?.value || "").trim();
+const timeline = (timelineField.value || "").trim();
+
 
     formError.classList.add("hidden");
     formError.textContent = "";
@@ -604,12 +616,16 @@
     }
 
     const payload = {
-      name, email, timeline,
-      score: totalScore(),
-      answers: answers.join(","),
-      page: window.location.href,
-      source: "Downsizing Questionnaire (GitHub Pages embed)"
-    };
+  name,
+  lastName,
+  email,
+  phone,
+  timeline,
+  score: totalScore(),
+  answers: answers.join(","),
+  page: window.location.href,
+  source: "Downsizing Questionnaire (GitHub Pages embed)"
+};
 
     // Most compatible Formspree format:
     const formBody = new URLSearchParams(payload).toString();
