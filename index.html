@@ -629,10 +629,17 @@
     };
 
     try{
-      const res = await fetch(FORMSPREE_ENDPOINT, {
-        method: "POST",
-        headers: { "Accept":"application/json", "Content-Type":"application/json" },
-        body: JSON.stringify(payload)
+const formBody = new URLSearchParams(payload).toString();
+
+const res = await fetch(FORMSPREE_ENDPOINT, {
+  method: "POST",
+  headers: {
+    "Accept": "application/json",
+    "Content-Type": "application/x-www-form-urlencoded"
+  },
+  body: formBody
+});
+
       });
       if(res.ok) return { ok:true };
       return { error: "The form didn’t send. Please try again, or click “Skip → See results”." };
