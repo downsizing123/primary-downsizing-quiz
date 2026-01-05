@@ -37,7 +37,7 @@
       gap:10px;
     }
 
-    /* Header card (always visible, mobile friendly) */
+    /* ONE header (mobile-friendly) */
     .topbar{
       background: var(--card);
       border: 1px solid var(--border);
@@ -104,7 +104,7 @@
       align-items:center;
       flex-wrap:wrap;
       color: var(--muted);
-      font-size:18px; /* keep >=18 */
+      font-size:18px;
       line-height:1.2;
     }
     .meta b{ color: var(--ink); }
@@ -147,7 +147,6 @@
       line-height:1.2;
     }
 
-    /* Answers */
     .answers{ display:grid; gap:8px; }
 
     .ans{
@@ -180,9 +179,7 @@
       border-color: rgba(47,47,214,.55);
       background: linear-gradient(135deg, rgba(47,47,214,.05), rgba(96,165,250,.10));
     }
-    .ans.selected .dot{
-      border-color: var(--blue);
-    }
+    .ans.selected .dot{ border-color: var(--blue); }
     .ans.selected .dot::after{
       content:"";
       position:absolute;
@@ -206,7 +203,6 @@
       line-height:1.25;
     }
 
-    /* Nav */
     .nav{
       display:flex;
       gap:10px;
@@ -241,7 +237,6 @@
 
     .hidden{ display:none !important; }
 
-    /* Lead + Results boxes */
     .box{
       border-radius: 16px;
       padding: 14px;
@@ -301,7 +296,6 @@
       line-height:1.35;
     }
 
-    /* Mobile: keep everything on screen */
     @media (max-width:600px){
       body{ padding:10px; }
       .topbar{ padding:12px; }
@@ -316,7 +310,6 @@
 <body>
   <div class="wrap">
 
-    <!-- ONE title only -->
     <div class="topbar">
       <div class="badge">✓</div>
       <div class="titleblock">
@@ -337,7 +330,6 @@
       </div>
 
       <div class="body">
-        <!-- QUIZ -->
         <div id="quizView">
           <div class="hint" id="hint">Choose one option to continue</div>
           <h2 class="q" id="qText"></h2>
@@ -349,7 +341,6 @@
           </div>
         </div>
 
-        <!-- LEAD CAPTURE -->
         <div id="leadView" class="hidden">
           <h2 class="q">Where should I send your results + 7-Step Roadmap?</h2>
 
@@ -382,7 +373,6 @@
           </div>
         </div>
 
-        <!-- RESULTS -->
         <div id="resultsView" class="hidden">
           <div class="box">
             <div class="scorebig" id="scoreBig">—</div>
@@ -402,8 +392,7 @@
 
 <script>
 (() => {
-  // Set these:
-  const FORMSPREE_ENDPOINT = "https://formspree.io/f/xwvpadow"; // <-- replace with yours when ready
+  const FORMSPREE_ENDPOINT = "https://formspree.io/f/xwvpadow";
   const GUIDE_URL = "https://downsizing123.my.canva.site/7-step-downsizing-roadmap";
 
   const quiz = [
@@ -517,7 +506,6 @@
   const maxScore = quiz.length * 4;
 
   function setProgress(){
-    // 0% at Q1, 100% after Q10 answered
     const pct = Math.round((index / quiz.length) * 100);
     progressFill.style.width = pct + "%";
     progressText.textContent = pct + "%";
@@ -526,6 +514,7 @@
   function render(){
     setProgress();
     const q = quiz[index];
+
     qNumEl.textContent = `Question ${index+1}`;
     qTextEl.textContent = q.q;
 
@@ -550,7 +539,6 @@
         nextBtn.disabled = false;
         hintEl.textContent = "Moving to the next question…";
 
-        // auto-advance after a tiny delay
         setTimeout(() => goNext(), 180);
       });
 
@@ -606,7 +594,6 @@
     formError.classList.add("hidden");
     formError.textContent = "";
 
-    // allow skip
     if(!name && !email) return { skipped:true };
 
     if(email && !/^\S+@\S+\.\S+$/.test(email)){
@@ -614,10 +601,6 @@
     }
     if(name && !email){
       return { error: "Please add your email so I can send your results + the 7-Step Roadmap." };
-    }
-
-    if(!FORMSPREE_ENDPOINT || FORMSPREE_ENDPOINT.includes("xxxxx")){
-      return { warn: "Form is not connected yet (Formspree endpoint missing). Results will still show." };
     }
 
     const payload = {
@@ -628,19 +611,19 @@
       source: "Downsizing Questionnaire (GitHub Pages embed)"
     };
 
+    // Most compatible Formspree format:
+    const formBody = new URLSearchParams(payload).toString();
+
     try{
-const formBody = new URLSearchParams(payload).toString();
-
-const res = await fetch(FORMSPREE_ENDPOINT, {
-  method: "POST",
-  headers: {
-    "Accept": "application/json",
-    "Content-Type": "application/x-www-form-urlencoded"
-  },
-  body: formBody
-});
-
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: formBody
       });
+
       if(res.ok) return { ok:true };
       return { error: "The form didn’t send. Please try again, or click “Skip → See results”." };
     }catch(e){
